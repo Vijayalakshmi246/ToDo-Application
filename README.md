@@ -1,5 +1,7 @@
 Developed a full stack crud application for managing ToDo tasks using AdonisJS as the backend framework and MySQL as the database.This application allows users to create,read,update and delete tasks.
 This is the fullstack boilerplate for AdonisJS,it comes pre configured with
+
+
 1.Bodyparser
 2.Session
 3.Authentication
@@ -11,6 +13,8 @@ This is the fullstack boilerplate for AdonisJS,it comes pre configured with
 
 
 Setup
+======
+
 To install the AdonisJS
     npm install -g @adonisjs/cli
 Create a New AdonisJS Projec
