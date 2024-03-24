@@ -30,21 +30,30 @@ Setup
 ======
 
 To install the AdonisJS
+
     npm install -g @adonisjs/cli
-Create a New AdonisJS Projec
+Create a New AdonisJS Project
+
     adonis new todo-app
 Navigate to the Project Directory
+
     cd todo-app
 Set Up Database Configuration
+
     AdonisJS uses Lucid ORM for interacting with databases
 Run Migrations
+
     adonis migration:run
 Create Models and Controllers
+
     adonis make:model Task
     adonis make:controller TaskController
 Define Routes
+
     Define routes for your application in the start/routes.js
 Set Up Frontend
+
+
     set up the frontend of your Todo application using HTML, CSS, and JavaScript.
 Run the Application
     adonis run --dev
