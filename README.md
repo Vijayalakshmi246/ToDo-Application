@@ -3,12 +3,26 @@ This is the fullstack boilerplate for AdonisJS,it comes pre configured with
 
 
 1.Bodyparser
+
+
 2.Session
+
+
 3.Authentication
+
+
 4.Middleware
+
+
 5.CORS
+
+
 6.Lucid ORM
+
+
 7.Migrations and Seeds
+
+
 8.public
 
 
