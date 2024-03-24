@@ -1,0 +1,31 @@
+# # get post based on id
+# GET http://localhost:3333/posts
+
+DELETE   http://localhost:3333/posts/1
+Content-Type: application/json
+
+# {
+#     "id":1,
+#     "title": "aleefa1",
+#     "description":"sitha",
+#     "status":"pending",
+#     "due_date":"2012-09-08"
+# }
+
+# {
+#     "title": "new",
+#     "description":"sitha",
+#     "status":"pending",
+#     "due_date":09-05-2012
+# }
+
+# {
+    
+#      "title":"rasjkjkj",
+#      "description":"sitha"
+
+#  }
+
+#     
+#     "status":"pending",
+#     "due_date":"09-05-2012"

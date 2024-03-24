@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Add custom styles here */
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <nav class="navbar navbar-dark bg-dark">
+            <div class="container">
+                <!-- Centered text -->
+                <span class="navbar-brand">ToDo Application</span>
+                <!-- Navbar toggler for mobile view -->
+                <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button> -->
+                <!-- Navbar links -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    
+                </div>
+            </div>
+        </nav>
+         
+        <!-- Create Task Form -->
+        <form id="createTaskForm" onsubmit="createTask">
+            
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <select class="form-control" id="status" name="status">
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="due_date">Due Date:</label>
+                <input type="date" class="form-control" id="due_date" name="due_date" required>
+            </div>
+            <button type="button" class="btn btn-primary" id="createTaskBtn" >Create Task</button>
+
+        </form>
+        <br>
+        <br>
+        <h2>Task List</h2>
+        <ul id="taskList" class="list-group">
+            <!-- Tasks will be dynamically added here -->
+        </ul>
+
+        
+    </div>
+
+    <script>
+        // JavaScript code for interacting with backend
+        function createTask(formData) {
+            fetch('http://localhost:3333/Posts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error creating task');
+                }
+                return response.json();
+            })
+            // .then(data => {
+            //     // Handle successful creation of task
+            //     console.log('Task created:', data);
+            //     // You can update the UI to display the newly created task if needed
+            // })
+            
+
+     .then(data => {
+    // Handle successful creation of task
+    console.log('Task created:', data);
+
+    // Assuming there's a container to display the newly created task
+    const taskContainer = document.getElementById('taskList');
+
+    // Create HTML elements to display the task details
+    const taskItem = document.createElement('li');
+    taskItem.classList.add('list-group-item');
+    taskItem.innerHTML = `
+        <h4>${data.title}</h4>
+        <p>Description: ${data.description}</p>
+        <p>Status: ${data.status}</p>
+        <p>Due Date: ${data.due_date}</p>
+    `;
+
+    // Append the newly created task to the task list container
+    taskContainer.appendChild(taskItem);
+   })
+            .catch(error => {
+                // Handle errors
+                console.error('Error creating task:', error);
+            });
+        }
+
+        // Event listener for "Create Task" button
+        document.getElementById('createTaskBtn').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            const formData = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                status: document.getElementById('status').value,
+                due_date: document.getElementById('due_date').value
+            };
+            createTask(formData); // Call createTask function with form data
+        });
+
+
+   
+
+
+    function markComplete(taskId) {
+            fetch(`http://localhost:3333/Posts/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: 'completed' })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error marking task as complete');
+                }
+                console.log('Task marked as complete:', taskId);
+                fetchTasks(); // Fetch updated task list
+            })
+            .catch(error => {
+                console.error('Error marking task as complete:', error);
+            });
+        }
+
+        // Function to delete task
+        function deleteTask(taskId) {
+            fetch(`http://localhost:3333/Posts/${taskId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error deleting task');
+                }
+                console.log('Task deleted:', taskId);
+                fetchTasks(); // Fetch updated task list
+            })
+            .catch(error => {
+                console.error('Error deleting task:', error);
+            });
+        }
+
+        // Function to fetch tasks from backend and display in UI
+        function fetchTasks() {
+            fetch('http://localhost:3333/Posts')
+                .then(response => response.json())
+                .then(tasks => {
+                    const taskList = document.getElementById('taskList');
+                    taskList.innerHTML = ''; // Clear previous tasks
+
+                    tasks.forEach(task => {
+                        const taskItem = document.createElement('li');
+                        taskItem.classList.add('list-group-item');
+                        taskItem.innerHTML = `
+                            <h4>${task.title}</h4>
+                            <p>Description: ${task.description}</p>
+                            <p>Status: ${task.status}</p>
+                            <p>Due Date: ${task.due_date}</p>
+                            <button type="button" class="btn btn-success mr-2" onclick="markComplete(${task.id})">Mark as Complete</button>
+                            <button type="button" class="btn btn-danger" onclick="deleteTask(${task.id})">Delete</button>
+                        `;
+                        taskList.appendChild(taskItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching tasks:', error);
+                });
+        }
+
+        // Event listener for "Create Task" button
+        document.getElementById('createTaskBtn').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            const formData = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                status: document.getElementById('status').value,
+                due_date: document.getElementById('due_date').value
+            };
+            createTask(formData); // Call createTask function with form data
+        });
+
+        // Fetch tasks when the page loads
+        fetchTasks();
+    </script>
+</body>
+</html>
