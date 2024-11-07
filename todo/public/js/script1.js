@@ -1,7 +1,4 @@
 <script src="js/script1.js">
-// JavaScript code for interacting with the backend
-
-// Function to create a new task
 
 
 function createTask(formData) {
