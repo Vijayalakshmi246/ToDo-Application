@@ -27,7 +27,8 @@
     "@adonisjs/session": "^1.0.27",
     "@adonisjs/shield": "^1.0.8",
     "joi": "^17.12.2",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "require-all": "^3.0.0"
   },
   "autoload": {
     "App": "./app"
